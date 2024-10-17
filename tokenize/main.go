@@ -157,7 +157,11 @@ func (t *Token) TokenizedText(dataset string) []string {
 
 	for word, freq := range frequencies {
 		if freq >= minFreq {
-			result = append(result, word)
+			if !uniqueItems[word] {
+				// append only new items
+				result = append(result, word)
+				uniqueItems[word] = true
+			}
 		}
 	}
 
