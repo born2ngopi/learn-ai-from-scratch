@@ -1,11 +1,41 @@
-// this fil is used to tokenize the text using BPE algorithm
-// it's allow model to breakdown the text into into smaller subword units or
-// individual characters
-package main
+package bpe
 
-type bpe struct {
-}
+import (
+	"strings"
+)
 
-func NewEncoder() *bpe {
-	return &bpe{}
+func Tokenize(text string) ([]string, map[string]int) {
+
+	text = strings.ToLower(text)
+
+	words := strings.Fields(text)
+	var (
+		result      []string
+		frequency   = make(map[string]int)
+		maxLendWord = 15
+	)
+
+	for i := 2; i <= maxLendWord; i++ {
+
+		for _, word := range words {
+			for j := 0; j < len(word); j++ {
+				if j+i > len(word) {
+					continue
+				}
+
+				subWord := word[j : j+i]
+				result = append(result, subWord)
+
+				if v, ok := frequency[subWord]; ok {
+					frequency[subWord] = v + 1
+				} else {
+					frequency[subWord] = 1
+				}
+
+			}
+		}
+	}
+
+	return result, frequency
+
 }

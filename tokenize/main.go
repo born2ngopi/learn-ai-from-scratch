@@ -12,6 +12,8 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+
+	"github.com/born2ngopi/llm/tokenize/bpe"
 )
 
 func main() {
@@ -147,6 +149,15 @@ func (t *Token) TokenizedText(dataset string) []string {
 				result = append(result, matches[i])
 				uniqueItems[item] = true
 			}
+		}
+	}
+
+	_, frequencies := bpe.Tokenize(dataset)
+	minFreq := 2
+
+	for word, freq := range frequencies {
+		if freq >= minFreq {
+			result = append(result, word)
 		}
 	}
 
